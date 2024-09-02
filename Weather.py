@@ -39,9 +39,12 @@ def display_weather():
         draw = ImageDraw.Draw(im)
         font = ImageFont.truetype("arial.ttf", 40)  # change path to where the arial font is in the directory
         draw.text((200, 200), text, fill=(0, 0, 0), font=font)
-        im.show()
+        image_path = "weather_image.png"
+        im.save(image_path)
+
+        return send_file(image_path, mimetype='image/png')
     else:
-        print("Invalid City Name")
+        return "Invalid City Name", 400
 
 
 if __name__ == '__main__':
