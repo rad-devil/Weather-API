@@ -19,15 +19,13 @@ def get_weather(city):
         return None
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def display_weather():
-    response = requests.get("https://ipinfo.io/json")  # auto detect location based on ip
-    data = response.json()  # getting json data
-    city = data.get("city")
-    # city = input("What is the name of the city?")       #uncomment this to take user input
-
+    city = None
+    if request.method == 'POST':
+        city = request.form['city']  # Get city from form input
     fore_cast = get_weather(city)
-    if not 'success' in fore_cast:  # checks if the city is invalid, if it is it will respond respectively
+    if fore_cast and 'success' not in fore_cast:  # checks if the city is invalid, if it is it will respond respectively
         date_time = fore_cast['location']['localtime']
         weather = fore_cast['current']['temperature']
         text = ("Time of reading: " + date_time + "\nTemperature: " + str(weather) + " °C" + "\nWeather Condition: " +
